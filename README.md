@@ -43,7 +43,7 @@ To run the project locally, follow these steps:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/rehmanNRY/SocialMediaApp
+   git clone https://github.com/Rakesh-Kummari/NEXORA--Developing-a-social-networking-platform.git
    ```
 
 2. **Install dependencies**:
