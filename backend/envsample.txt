@@ -1,0 +1,4 @@
+MONGO_URI=mongodb://localhost:27017/project
+PORT=5000
+CORS_ORIGIN=*
+JWT_SECRET=kE+sN3fTq9hVz/Gf8pL7rA2uCxJ0bY1dM4zR5wE6oFk=
