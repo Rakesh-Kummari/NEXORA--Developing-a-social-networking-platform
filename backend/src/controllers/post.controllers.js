@@ -1,11 +1,11 @@
 // post.controller.js
-import { Post } from '../models/post.model.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
-import { ApiError } from '../utils/ApiError.js';
-import { ApiResponse } from '../utils/ApiResponse.js';
-import { Comment } from '../models/comment.model.js';
-import { Notification } from '../models/notification.model.js';
-import { User } from '../models/user.model.js';
+import { Post } from "../models/post.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { Comment } from "../models/comment.model.js";
+import { Notification } from "../models/notification.model.js";
+import { User } from "../models/user.model.js";
 
 // Create a new post
 export const createPost = asyncHandler(async (req, res, next) => {
@@ -14,7 +14,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
     let { content, backgroundColor, pollData, feeling } = req.body;
 
     // If pollData comes via multipart/form-data, it will be a string
-    if (typeof pollData === 'string') {
+    if (typeof pollData === "string") {
       try {
         pollData = JSON.parse(pollData);
       } catch (_) {
@@ -27,19 +27,19 @@ export const createPost = asyncHandler(async (req, res, next) => {
     const image = uploadedImageUrl || (req.body.image ? req.body.image : null);
 
     // Create post object with basic fields
-    const postData = { 
-      content, 
+    const postData = {
+      content,
       image,
       feeling,
-      backgroundColor: backgroundColor || 'bg-white',
-      user: userId, 
+      backgroundColor: backgroundColor || "bg-white",
+      user: userId,
     };
 
     // Add poll data if provided
     if (pollData && pollData.options && pollData.options.length >= 2) {
-      const pollOptions = pollData.options.map(option => ({
+      const pollOptions = pollData.options.map((option) => ({
         text: option,
-        votes: []
+        votes: [],
       }));
 
       // Calculate poll end date based on duration in hours
@@ -49,7 +49,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
       postData.poll = {
         options: pollOptions,
         endDate: endDate,
-        active: true
+        active: true,
       };
     }
 
@@ -58,14 +58,16 @@ export const createPost = asyncHandler(async (req, res, next) => {
 
     // Fetch the new post with populated user details
     const populatedPost = await Post.findById(post._id)
-      .populate('user', 'fullName profilePicture username')
-      .populate('likes', 'fullName')
-      .populate('poll.options.votes', 'fullName username profilePicture')
+      .populate("user", "fullName profilePicture username")
+      .populate("likes", "fullName")
+      .populate("poll.options.votes", "fullName username profilePicture")
       .lean();
 
-    res.status(201).json(new ApiResponse(201, 'Post created successfully', populatedPost));
+    res
+      .status(201)
+      .json(new ApiResponse(201, "Post created successfully", populatedPost));
   } catch (error) {
-    next(new ApiError(500, 'Failed to create post'));
+    next(new ApiError(500, "Failed to create post"));
   }
 });
 
@@ -74,14 +76,14 @@ export const getAllPosts = asyncHandler(async (req, res, next) => {
   try {
     // Fetch all posts with populated user and likes fields
     const posts = await Post.find()
-      .populate('user', 'fullName profilePicture username')
-      .populate('likes', 'fullName')
-      .populate('poll.options.votes', 'fullName username profilePicture')
+      .populate("user", "fullName profilePicture username")
+      .populate("likes", "fullName")
+      .populate("poll.options.votes", "fullName username profilePicture")
       .lean(); // Use .lean() for better performance and mutability
 
     // Check if any polls have expired and update their active status
     const now = new Date();
-    const updatedPosts = posts.map(post => {
+    const updatedPosts = posts.map((post) => {
       if (post.poll && post.poll.endDate && post.poll.active) {
         if (new Date(post.poll.endDate) < now) {
           post.poll.active = false;
@@ -90,9 +92,13 @@ export const getAllPosts = asyncHandler(async (req, res, next) => {
       return post;
     });
 
-    res.status(200).json(new ApiResponse(200, 'All posts fetched successfully', updatedPosts));
+    res
+      .status(200)
+      .json(
+        new ApiResponse(200, "All posts fetched successfully", updatedPosts)
+      );
   } catch (error) {
-    next(new ApiError(500, 'Failed to fetch posts'));
+    next(new ApiError(500, "Failed to fetch posts"));
   }
 });
 
@@ -103,13 +109,13 @@ export const getPostById = asyncHandler(async (req, res, next) => {
 
     // Find the post by ID and populate necessary fields
     const post = await Post.findById(id)
-      .populate('user', 'fullName profilePicture username')
-      .populate('likes', 'fullName')
-      .populate('poll.options.votes', 'fullName username profilePicture')
+      .populate("user", "fullName profilePicture username")
+      .populate("likes", "fullName")
+      .populate("poll.options.votes", "fullName username profilePicture")
       .lean();
 
     if (!post) {
-      return next(new ApiError(404, 'Post not found'));
+      return next(new ApiError(404, "Post not found"));
     }
 
     // Check if the poll has expired and update its active status
@@ -120,12 +126,13 @@ export const getPostById = asyncHandler(async (req, res, next) => {
       }
     }
 
-    res.status(200).json(new ApiResponse(200, 'Post fetched successfully', post));
+    res
+      .status(200)
+      .json(new ApiResponse(200, "Post fetched successfully", post));
   } catch (error) {
-    next(new ApiError(500, 'Failed to fetch post'));
+    next(new ApiError(500, "Failed to fetch post"));
   }
 });
-
 
 // Edit own post
 export const editPost = asyncHandler(async (req, res, next) => {
@@ -136,7 +143,12 @@ export const editPost = asyncHandler(async (req, res, next) => {
   // Find the post and ensure it belongs to the logged-in user
   const post = await Post.findOne({ _id: postId, user: userId });
   if (!post) {
-    return next(new ApiError(404, 'Post not found or you are not authorized to edit this post'));
+    return next(
+      new ApiError(
+        404,
+        "Post not found or you are not authorized to edit this post"
+      )
+    );
   }
 
   // Update the post
@@ -146,12 +158,14 @@ export const editPost = asyncHandler(async (req, res, next) => {
   await post.save();
 
   const populatedPost = await Post.findById(post._id)
-    .populate('user', 'fullName profilePicture username')
-    .populate('likes', 'fullName')
-    .populate('poll.options.votes', 'fullName username profilePicture')
+    .populate("user", "fullName profilePicture username")
+    .populate("likes", "fullName")
+    .populate("poll.options.votes", "fullName username profilePicture")
     .lean();
 
-  res.status(200).json(new ApiResponse(200, 'Post updated successfully', populatedPost));
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Post updated successfully", populatedPost));
 });
 
 // Delete own post
@@ -162,13 +176,20 @@ export const deletePost = asyncHandler(async (req, res, next) => {
   // Find the post and ensure it belongs to the logged-in user
   const post = await Post.findOneAndDelete({ _id: postId, user: userId });
   if (!post) {
-    return next(new ApiError(404, 'Post not found or you are not authorized to delete this post'));
+    return next(
+      new ApiError(
+        404,
+        "Post not found or you are not authorized to delete this post"
+      )
+    );
   }
 
   // Delete all comments associated with the deleted post
   await Comment.deleteMany({ post: postId });
 
-  res.status(200).json(new ApiResponse(200, 'Post and its comments deleted successfully'));
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Post and its comments deleted successfully"));
 });
 
 // Like or unlike a post
@@ -179,7 +200,7 @@ export const toggleLikePost = asyncHandler(async (req, res, next) => {
 
   const post = await Post.findById(postId);
   if (!post) {
-    return next(new ApiError(404, 'Post not found'));
+    return next(new ApiError(404, "Post not found"));
   }
 
   // Check if the user already liked the post
@@ -191,7 +212,7 @@ export const toggleLikePost = asyncHandler(async (req, res, next) => {
   } else {
     // Like the post
     post.likes.push(userId);
-    
+
     // Create notification for post owner if the liker is not the post owner
     if (post.user.toString() !== userId) {
       await Notification.create({
@@ -205,24 +226,39 @@ export const toggleLikePost = asyncHandler(async (req, res, next) => {
 
   await post.save();
   const populatedPost = await Post.findById(post._id)
-    .populate('user', 'fullName profilePicture username')
-    .populate('likes', 'fullName')
-    .populate('poll.options.votes', 'fullName username profilePicture')
+    .populate("user", "fullName profilePicture username")
+    .populate("likes", "fullName")
+    .populate("poll.options.votes", "fullName username profilePicture")
     .lean();
 
-  res.status(200).json(new ApiResponse(200, hasLiked ? 'Post unliked' : 'Post liked', populatedPost));
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        hasLiked ? "Post unliked" : "Post liked",
+        populatedPost
+      )
+    );
 });
 
 // List of all users who liked a post
 export const getPostLikers = asyncHandler(async (req, res, next) => {
   const { postId } = req.params;
 
-  const post = await Post.findById(postId).populate('likes', 'fullName profilePicture username');
+  const post = await Post.findById(postId).populate(
+    "likes",
+    "fullName profilePicture username"
+  );
   if (!post) {
-    return next(new ApiError(404, 'Post not found'));
+    return next(new ApiError(404, "Post not found"));
   }
 
-  res.status(200).json(new ApiResponse(200, 'List of likers fetched successfully', post.likes));
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, "List of likers fetched successfully", post.likes)
+    );
 });
 
 // Vote on a poll option
@@ -233,25 +269,25 @@ export const votePollOption = asyncHandler(async (req, res, next) => {
 
   const post = await Post.findById(postId);
   if (!post) {
-    return next(new ApiError(404, 'Post not found'));
+    return next(new ApiError(404, "Post not found"));
   }
 
   // Check if poll exists and is active
   if (!post.poll || !post.poll.active) {
-    return next(new ApiError(400, 'Poll is not active or does not exist'));
+    return next(new ApiError(400, "Poll is not active or does not exist"));
   }
 
   // Check if poll has expired
   if (post.poll.endDate && new Date(post.poll.endDate) < new Date()) {
     post.poll.active = false;
     await post.save();
-    return next(new ApiError(400, 'Poll has expired'));
+    return next(new ApiError(400, "Poll has expired"));
   }
 
   // Find the option
   const option = post.poll.options.id(optionId);
   if (!option) {
-    return next(new ApiError(404, 'Poll option not found'));
+    return next(new ApiError(404, "Poll option not found"));
   }
 
   // Check if user has already voted on any option
@@ -275,7 +311,7 @@ export const votePollOption = asyncHandler(async (req, res, next) => {
   // Add user's vote to the selected option
   option.votes.push(userId);
   await post.save();
-  
+
   // Create notification for post owner if the voter is not the post owner
   if (!userHasVoted && post.user.toString() !== userId) {
     await Notification.create({
@@ -288,44 +324,51 @@ export const votePollOption = asyncHandler(async (req, res, next) => {
 
   // Return the updated post with populated fields
   const populatedPost = await Post.findById(post._id)
-    .populate('user', 'fullName profilePicture username')
-    .populate('likes', 'fullName')
-    .populate('poll.options.votes', 'fullName username profilePicture')
+    .populate("user", "fullName profilePicture username")
+    .populate("likes", "fullName")
+    .populate("poll.options.votes", "fullName username profilePicture")
     .lean();
 
-  res.status(200).json(new ApiResponse(200, 'Vote recorded successfully', populatedPost));
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Vote recorded successfully", populatedPost));
 });
 
 // Get poll results
 export const getPollResults = asyncHandler(async (req, res, next) => {
   const { postId } = req.params;
 
-  const post = await Post.findById(postId)
-    .populate('poll.options.votes', 'fullName username profilePicture');
-  
+  const post = await Post.findById(postId).populate(
+    "poll.options.votes",
+    "fullName username profilePicture"
+  );
+
   if (!post || !post.poll) {
-    return next(new ApiError(404, 'Post or poll not found'));
+    return next(new ApiError(404, "Post or poll not found"));
   }
 
   // Calculate total votes
   let totalVotes = 0;
-  post.poll.options.forEach(option => {
+  post.poll.options.forEach((option) => {
     totalVotes += option.votes.length;
   });
 
   // Calculate percentages and prepare results
-  const results = post.poll.options.map(option => ({
+  const results = post.poll.options.map((option) => ({
     _id: option._id,
     text: option.text,
     votes: option.votes,
     voteCount: option.votes.length,
-    percentage: totalVotes > 0 ? Math.round((option.votes.length / totalVotes) * 100) : 0
+    percentage:
+      totalVotes > 0 ? Math.round((option.votes.length / totalVotes) * 100) : 0,
   }));
 
-  res.status(200).json(new ApiResponse(200, 'Poll results fetched successfully', {
-    results,
-    totalVotes,
-    active: post.poll.active,
-    endDate: post.poll.endDate
-  }));
+  res.status(200).json(
+    new ApiResponse(200, "Poll results fetched successfully", {
+      results,
+      totalVotes,
+      active: post.poll.active,
+      endDate: post.poll.endDate,
+    })
+  );
 });

@@ -14,19 +14,19 @@
   font-family: HelvB;
   src: url("../../public/fonts/HelveticaNowDispBd.ttf");
 }
-.HelvR{
+.HelvR {
   font-family: HelvR !important;
 }
-.HelvM{
+.HelvM {
   font-family: HelvM !important;
 }
-.HelvB{
+.HelvB {
   font-family: HelvB !important;
 }
 /* Pre Loader */
 .preLoader svg path,
-.preLoader svg rect{
-  fill: #6366F1;
+.preLoader svg rect {
+  fill: #6366f1;
 }
 @keyframes rotate {
   0% {
@@ -51,13 +51,14 @@
 .rightBar,
 .scrollbar-hide,
 .mini-sidebar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Custom animations for floating elements */
 @keyframes float-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
@@ -66,7 +67,8 @@
 }
 
 @keyframes float-medium {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
@@ -75,7 +77,8 @@
 }
 
 @keyframes float-fast {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
