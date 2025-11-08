@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const UserProfile = () => {
   return (
@@ -23,9 +23,11 @@ const UserProfile = () => {
             />
           </div>
           <div className="ml-40">
-            <h1 className="text-2xl font-bold text-gray-800">John Doe</h1>
+            <h1 className="text-2xl font-bold text-gray-800">Rakesh Kummari</h1>
             <p className="text-sm text-gray-600">Joined: January 2022</p>
-            <p className="mt-2 text-gray-700">Full Stack Developer | Tech Enthusiast</p>
+            <p className="mt-2 text-gray-700">
+              Full Stack Developer | Tech Enthusiast
+            </p>
             <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">
               Follow
             </button>
@@ -50,22 +52,29 @@ const UserProfile = () => {
 
         {/* Profile Details */}
         <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Profile Information</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            Profile Information
+          </h3>
           <ul className="space-y-2 text-gray-700">
             <li>
-              <span className="font-semibold">Location:</span> New York, USA
+              <span className="font-semibold">Location:</span> Dhule
             </li>
             <li>
-              <span className="font-semibold">Email:</span> john.doe@example.com
+              <span className="font-semibold">Email:</span>{" "}
+              rajbabukummari0341@gmail.com
             </li>
             <li>
-              <span className="font-semibold">Website:</span> www.johndoe.com
+              <span className="font-semibold">Website:</span>{" "}
+              rakesh-portfolio-t1sf.onrender.com
             </li>
             <li>
-              <span className="font-semibold">Skills:</span> JavaScript, React, Node.js, CSS, HTML
+              <span className="font-semibold">Skills:</span> JavaScript, React,
+              Node.js, CSS, HTML
             </li>
             <li>
-              <span className="font-semibold">Bio:</span> Passionate about building beautiful web applications and exploring new technologies.
+              <span className="font-semibold">Bio:</span> Passionate about
+              building beautiful web applications and exploring new
+              technologies.
             </li>
           </ul>
         </div>
@@ -81,7 +90,9 @@ const UserProfile = () => {
                   alt={`Friend ${index + 1}`}
                   className="w-16 h-16 rounded-full border-2 border-gray-200"
                 />
-                <span className="text-sm text-gray-600 mt-2">Friend {index + 1}</span>
+                <span className="text-sm text-gray-600 mt-2">
+                  Friend {index + 1}
+                </span>
               </div>
             ))}
           </div>
