@@ -1,9 +1,9 @@
-import Link from "next/link";
-import React from "react";
-import { FaUserFriends } from "react-icons/fa";
+import Link from 'next/link';
+import React from 'react';
+import { FaUserFriends } from 'react-icons/fa';
 
 const FriendList = ({ users, user }) => {
-  const friends = a; //users.filter((friend) => user.friends.includes(friend._id));
+  const friends = users.filter((friend) => user.friends.includes(friend._id));
 
   return (
     <div className="p-6 border-t border-gray-200 bg-white">
@@ -15,9 +15,7 @@ const FriendList = ({ users, user }) => {
         <div className="flex flex-col items-center justify-center text-center p-6">
           <FaUserFriends className="text-gray-300 text-6xl mb-4" />
           <p className="text-xl text-gray-500">No friends to show</p>
-          <p className="text-sm text-gray-400 mt-2">
-            Add some friends to see them here.
-          </p>
+          <p className="text-sm text-gray-400 mt-2">Add some friends to see them here.</p>
         </div>
       ) : (
         <div className="flex flex-wrap gap-4 justify-center">
@@ -40,6 +38,7 @@ const FriendList = ({ users, user }) => {
         </div>
       )}
     </div>
+
   );
 };
 

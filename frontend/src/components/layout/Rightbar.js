@@ -106,6 +106,7 @@ const Rightbar = () => {
 
               {/* Navigation Menu */}
               <motion.div
+              
                 className="bg-gray-50 rounded-xl p-3"
                 initial="hidden"
                 animate="visible"

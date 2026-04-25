@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -23,11 +24,13 @@ const AuthRedirect = ({ children }) => {
     }
   }, [isLoggedIn, status, router]);
 
-  if (!isClient || status === 'loading') {
-    return <Loading />;
-  }
-
-  return <>{isLoggedIn && children}</>;
+  // if (!isClient || status === 'loading') {
+  //   return <Loading />;
+  // }
+  if (!isClient) {
+  return null;
+}
+return <>{children}</>;
 };
 
 export default AuthRedirect;
