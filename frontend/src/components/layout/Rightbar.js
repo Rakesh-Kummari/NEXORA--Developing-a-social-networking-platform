@@ -15,6 +15,7 @@ const Rightbar = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
   const [isClient, setIsClient] = useState(false);
   const [showMoreUsers, setShowMoreUsers] = useState(false);
+  const [showRightbar, setShowRightbar] = useState(true);
   const [showMoreTags, setShowMoreTags] = useState(false);
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -70,14 +71,26 @@ const Rightbar = () => {
 
   return (
     <>
+    <button
+    onClick={() => setShowRightbar(!showRightbar)}
+      className="fixed bottom-5 right-5 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg"
+       >
+        ☰
+   </button>
+
       {isLoggedIn && (
         <div className="flex">
           {/* Main Full Rightbar */}
-          <div className="w-64 md:block z-20 mr-1 ml-auto">
+          <div
+  className={`${
+    showRightbar ? "w-64" : "w-0"
+  } transition-all duration-300 overflow-hidden z-20 mr-1 ml-auto`}
+>
             <div
-              className="rightBar w-64 p-4 bg-white shadow-md flex flex-col gap-4 fixed overflow-y-auto rounded-xl border border-gray-100"
-              style={{ height: "calc(100vh - 4rem)" }}
-            >
+  className={`${
+    showRightbar ? "block" : "hidden"
+  } rightBar w-64 p-4 bg-white shadow-md flex flex-col gap-4 sticky top-16 overflow-y-auto rounded-xl border border-gray-100`}
+>
               {/* Story Banner */}
               <div>
                 <motion.div
@@ -282,11 +295,16 @@ const Rightbar = () => {
           </div>
           {/* Mini Sidebar - Always Visible on the left */}
 
-          <div className="w-20 z-20">
-            <div
-              className="mini-sidebar w-20 py-6 px-3 bg-white/95 shadow-sm fixed overflow-y-auto rounded-xl border border-purple-100 flex flex-col items-center gap-6"
-              style={{ height: "calc(100vh - 4rem)" }}
-            >
+          <div
+  className={`${
+    showRightbar ? "w-20" : "w-0"
+  } transition-all duration-300 overflow-hidden z-20`}
+>
+           <div
+  className={`${
+    showRightbar ? "flex" : "hidden"
+  } mini-sidebar w-20 py-6 px-3 bg-white/95 shadow-sm sticky top-16 overflow-y-auto rounded-xl border border-purple-100 flex-col items-center gap-6`}
+>
               <motion.div
                 className="bg-gradient-to-r from-purple-500 to-indigo-400 p-3 rounded-xl cursor-pointer relative"
                 whileHover={{ scale: 1.1 }}
